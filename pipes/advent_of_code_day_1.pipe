@@ -5,27 +5,9 @@ DESCRIPTION >
 NODE total_calories
 SQL >
 
-    WITH
-        (
-            SELECT groupArray(calories)
-            FROM
-                (
-                    SELECT
-                        if(isNull (calories), '#', toString(calories)) as calories
-                    FROM day_1
-                ) as grouped
-        ) as total_grouped_calories
     SELECT
-        arrayReduce(
-            'sum',
-            arrayMap(
-                (x) -> toInt64(x),
-                arrayFilter(
-                    (x) -> x != '#',
-                    arrayJoin(arraySplit((x) -> x = '#', total_grouped_calories))
-                )
-            )
-        ) as total
+        arrayReduce('sum', arrayFilter((x) -> x != 0, arrayJoin(arraySplit((x) -> x = 0, groupArray(if(isnull (calories), 0, calories)))))) as total
+    FROM day_1
     ORDER BY total DESC
     LIMIT 3
 
