@@ -7,6 +7,14 @@ Advent of Code solved in Tinybird using ClickHouse
 
 ![Tinybird Workspace Screenshot](/images/workspace_screenshot.png)
 
+
+### Snapshots
+
+* [Day 1 - Calorie Counting 🌟🌟](https://ui.tinybird.co/snapshot/4a4ed6574efe4a12897d17b29e0dfb3d)
+* [Day 2 - Rock, paper, scissors 🪨📃✂️](https://ui.tinybird.co/snapshot/ea741c6d3a13494fafc8b02b8edeb3b9)
+* [Day 3 - Rucksack Reorganization 🎒](https://ui.tinybird.co/snapshot/bcae8726037047dc891842d3c6a44180)
+* [Day 4 - Camp Cleanup 🧹✨](https://ui.tinybird.co/snapshot/78a47a85fc8640e7b95af16bd9e5cb33)
+
 ### Installation
 
 1. Install `tinybird-cli`
