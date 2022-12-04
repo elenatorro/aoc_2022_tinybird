@@ -1,0 +1,8 @@
+
+SCHEMA >
+    `section_1` String,
+    `section_2` String
+
+ENGINE "MergeTree"
+ENGINE_SORTING_KEY "section_1, section_2"
+ENGINE_SETTINGS "index_granularity = 8192"

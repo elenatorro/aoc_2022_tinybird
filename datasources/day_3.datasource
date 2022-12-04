@@ -1,0 +1,6 @@
+
+SCHEMA >
+    `rucksack` String
+
+ENGINE "MergeTree"
+ENGINE_SETTINGS "index_granularity = 8192"

@@ -1,0 +1,46 @@
+DESCRIPTION >
+	Day 1 - Calorie Counting 🌟🌟 ([Advent Of Code 2022](https://adventofcode.com/))
+
+
+NODE total_calories
+SQL >
+
+    WITH
+        (
+            SELECT groupArray(calories)
+            FROM
+                (
+                    SELECT
+                        if(isNull (calories), '#', toString(calories)) as calories
+                    FROM day_1
+                ) as grouped
+        ) as total_grouped_calories
+    SELECT
+        arrayReduce(
+            'sum',
+            arrayMap(
+                (x) -> toInt64(x),
+                arrayFilter(
+                    (x) -> x != '#',
+                    arrayJoin(arraySplit((x) -> x = '#', total_grouped_calories))
+                )
+            )
+        ) as total
+    ORDER BY total DESC
+    LIMIT 3
+
+
+
+NODE part_1
+SQL >
+
+    SELECT * FROM total_calories LIMIT 1
+
+
+
+NODE part_2
+SQL >
+
+    SELECT sum(c) as total FROM total_calories
+
+

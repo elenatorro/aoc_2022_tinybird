@@ -1,0 +1,8 @@
+
+SCHEMA >
+    `score_a` String,
+    `score_b` String
+
+ENGINE "MergeTree"
+ENGINE_SORTING_KEY "score_a, score_b"
+ENGINE_SETTINGS "index_granularity = 8192"

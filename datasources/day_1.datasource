@@ -1,0 +1,9 @@
+
+SCHEMA >
+    `calories` Nullable(Int64),
+    `date` DateTime DEFAULT now()
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toYear(date)"
+ENGINE_SORTING_KEY "date"
+ENGINE_SETTINGS "index_granularity = 8192"

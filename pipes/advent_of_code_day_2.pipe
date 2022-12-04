@@ -1,0 +1,63 @@
+DESCRIPTION >
+	Day 2 - Rock, paper, scissors 🪨📃✂️ ([Advent Of Code 2022](https://adventofcode.com/))
+
+
+NODE part_one
+SQL >
+
+    SELECT
+      total_scores_choice + total_scores_match as total_scores
+    FROM (
+      SELECT
+          sum(
+              multiIf(score_b = 'X', 1, score_b = 'Y', 2, score_b = 'Z', 3, 0)
+          ) as total_scores_choice,
+          sum(
+              multiIf(
+                concat(score_a, score_b) = 'AX', 3,
+                concat(score_a, score_b) = 'AY', 6,
+                concat(score_a, score_b) = 'BY', 3,
+                concat(score_a, score_b) = 'BZ', 6,
+                concat(score_a, score_b) = 'CX', 6,
+                concat(score_a, score_b) = 'CZ', 3,
+               0)
+          ) as total_scores_match
+      FROM day_2
+    )
+
+
+
+NODE part_two
+SQL >
+
+    SELECT
+      total_scores_choice + total_scores_match as total_scores
+    FROM (
+      SELECT
+          sum(
+              multiIf(
+                concat(score_a, score_b) = 'AX', 3,
+                concat(score_a, score_b) = 'AY', 1,
+                concat(score_a, score_b) = 'AZ', 2,
+                concat(score_a, score_b) = 'BX', 1,
+                concat(score_a, score_b) = 'BY', 2,
+                concat(score_a, score_b) = 'BZ', 3,
+                concat(score_a, score_b) = 'CX', 2,
+                concat(score_a, score_b) = 'CY', 3,
+                concat(score_a, score_b) = 'CZ', 1,
+               0)
+          ) as total_scores_choice,
+          sum(
+              multiIf(
+                concat(score_a, score_b) = 'AY', 3,
+                concat(score_a, score_b) = 'AZ', 6,
+                concat(score_a, score_b) = 'BY', 3,
+                concat(score_a, score_b) = 'BZ', 6,
+                concat(score_a, score_b) = 'CY', 3,
+                concat(score_a, score_b) = 'CZ', 6,
+               0)
+          ) as total_scores_match
+      FROM day_2
+    )
+
+

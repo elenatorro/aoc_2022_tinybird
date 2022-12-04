@@ -1,0 +1,42 @@
+DESCRIPTION >
+	Day 3 - Rucksack Reorganization 🎒 ([Advent Of Code 2022](https://adventofcode.com/))
+
+
+NODE part_one
+SQL >
+
+    SELECT sum(if(value > 90, value - 96, value - 38)) as total
+    FROM
+    (
+      SELECT
+          extractAll(substring(rucksack, 1, length(rucksack)/2), '.') as a,
+          extractAll(substring(rucksack, length(rucksack)/2+1, length(rucksack)), '.') as b,
+          arrayIntersect(a, b)[1] as c,
+          reinterpret(c, 'Int64') as value
+      FROM day_3
+    )
+
+
+
+NODE part_two
+SQL >
+
+    SELECT sum(if(value > 90, value - 96, value - 38)) as total
+    FROM
+    (
+      SELECT reinterpret(arrayIntersect(arr[1], arr[2], arr[3])[1], 'Int64') as value
+      FROM
+      (
+        SELECT arrayMap(x -> splitByString('', x), arrayJoin(result)) as arr
+        FROM
+        (
+          SELECT
+              groupArray(rucksack) AS arr,
+              arrayMap((x, index) -> if(index % 3 = 1, 1, 0), arr, arrayEnumerate(arr)) AS split_rules,
+              arraySplit((x, y) -> y, arr, split_rules) AS result
+          FROM day_3
+        )
+      )
+    )
+
+

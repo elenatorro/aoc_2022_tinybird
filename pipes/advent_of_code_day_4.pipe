@@ -1,0 +1,43 @@
+DESCRIPTION >
+	Day 4 - Camp Cleanup 🧹✨ ([Advent Of Code 2022](https://adventofcode.com/))
+
+
+NODE part_one
+SQL >
+
+    SELECT countIf(or (hasAll(s1, s2), hasAll(s2, s1))) as total
+    FROM
+        (
+            SELECT
+                range(toUInt64(section_1[1]), toUInt64(section_1[2]) + 1) as s1,
+                range(toUInt64(section_2[1]), toUInt64(section_2[2]) + 1) as s2
+            FROM
+                (
+                    SELECT
+                        splitByString('-', section_1) as section_1,
+                        splitByString('-', section_2) as section_2
+                    FROM day_4
+                )
+        )
+
+
+
+NODE part_two
+SQL >
+
+    SELECT countIf(length(arrayIntersect(s1, s2)) > 0) as total
+    FROM
+        (
+            SELECT
+                range(toUInt64(section_1[1]), toUInt64(section_1[2]) + 1) as s1,
+                range(toUInt64(section_2[1]), toUInt64(section_2[2]) + 1) as s2
+            FROM
+                (
+                    SELECT
+                        splitByString('-', section_1) as section_1,
+                        splitByString('-', section_2) as section_2
+                    FROM day_4
+                )
+        )
+
+
