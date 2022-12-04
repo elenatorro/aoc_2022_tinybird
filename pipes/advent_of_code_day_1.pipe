@@ -41,6 +41,6 @@ SQL >
 NODE part_2
 SQL >
 
-    SELECT sum(c) as total FROM total_calories
+    SELECT sum(total) as total FROM total_calories
 
 
