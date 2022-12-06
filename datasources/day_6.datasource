@@ -1,0 +1,8 @@
+
+SCHEMA >
+    `line` String,
+    `date` DateTime DEFAULT now()
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toYear(date)"
+ENGINE_SORTING_KEY "date"

@@ -1,0 +1,49 @@
+DESCRIPTION >
+	Day 6 - Tuning Trouble 📡 ([Advent Of Code 2022](https://adventofcode.com/))
+
+
+NODE part_one
+SQL >
+
+    WITH chunk AS (
+        SELECT
+            line,
+            extractAll(line, '.') as lines,
+            arrayStringConcat(
+                arrayFilter(
+                    x -> arrayUniq(x) = 4,
+                    arrayMap(
+                        x -> arraySlice(lines, x, 4), range(1, length(lines))))[1]) as g
+        FROM day_6
+    )
+    SELECT *
+    FROM (
+        WITH (SELECT g FROM chunk) as g
+        SELECT assumeNotNull(g) as ga, length(splitByString(ga, line)[1]) + 4 as total
+        FROM chunk
+    )
+
+
+
+NODE part_two
+SQL >
+
+    WITH chunk AS (
+        SELECT
+            line,
+            extractAll(line, '.') as lines,
+            arrayStringConcat(
+                arrayFilter(
+                    x -> arrayUniq(x) = 14,
+                    arrayMap(
+                        x -> arraySlice(lines, x, 14), range(1, length(lines))))[1]) as g
+        FROM day_6
+    )
+    SELECT *
+    FROM (
+        WITH (SELECT g FROM chunk) as g
+        SELECT assumeNotNull(g) as ga, length(splitByString(ga, line)[1]) + 14 as total
+        FROM chunk
+    )
+
+

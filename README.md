@@ -14,6 +14,8 @@ Advent of Code solved in Tinybird using ClickHouse
 * [Day 2 - Rock, paper, scissors 🪨📃✂️](https://ui.tinybird.co/snapshot/ea741c6d3a13494fafc8b02b8edeb3b9)
 * [Day 3 - Rucksack Reorganization 🎒](https://ui.tinybird.co/snapshot/bcae8726037047dc891842d3c6a44180)
 * [Day 4 - Camp Cleanup 🧹✨](https://ui.tinybird.co/snapshot/78a47a85fc8640e7b95af16bd9e5cb33)
+* Day 5 - Supply Stacks 🥫 *(skipped for now)*
+* [Day 6 - Tuning Trouble 📡](https://ui.tinybird.co/snapshot/7f7e2e151e4b4d43a89257c62070a621)
 
 ### Installation
 
