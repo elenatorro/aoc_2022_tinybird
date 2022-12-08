@@ -1,0 +1,10 @@
+DESCRIPTION >
+	TODO
+
+
+NODE advent_of_code_day_7_0
+SQL >
+
+    SELECT * FROM day_7
+
+

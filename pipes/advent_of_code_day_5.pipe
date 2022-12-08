@@ -1,0 +1,220 @@
+DESCRIPTION >
+	WIP
+
+
+NODE stacks_parsed
+SQL >
+
+    SELECT * 
+    FROM day_5
+    WHERE line like '%[%'
+
+
+
+NODE movements
+SQL >
+
+    SELECT arrayMap(x -> toInt8(x), extractAll(line, '(\d+)')) as movement
+    FROM day_5
+    WHERE line LIKE '%move%'
+
+
+
+NODE parsed_stacks
+SQL >
+
+    SELECT arrayMap(x -> if(empty(x), null, x), extractAllGroupsHorizontal(line, '\[([A-Z]+)\]|\s{4}')[1]) as stacks FROM stacks_parsed
+
+
+
+NODE stack_columns
+SQL >
+
+    -- TODO: do this automatically
+    SELECT
+    [groupArray(stack_1) as stack_1,
+    groupArray(stack_2) as stack_2,
+    groupArray(stack_3) as stack_3,
+    groupArray(stack_4) as stack_4,
+    groupArray(stack_5) as stack_5,
+    groupArray(stack_6) as stack_6,
+    groupArray(stack_7) as stack_7,
+    groupArray(stack_8) as stack_8,
+    groupArray(stack_9) as stack_9
+     ] as s
+    FROM (
+    SELECT
+      stacks[1] as stack_1,
+      stacks[2] as stack_2,
+      stacks[3] as stack_3,
+      stacks[4] as stack_4,
+      stacks[5] as stack_5,
+      stacks[6] as stack_6,
+      stacks[7] as stack_7,
+      stacks[8] as stack_8,
+      stacks[9] as stack_9
+    FROM parsed_stacks)
+
+
+
+NODE working_solution
+SQL >
+
+    SELECT arr
+    FROM (
+    WITH (SELECT movement FROM movements LIMIT 1) as m 
+    SELECT
+      arrayMap(x -> x, m) as a,
+      arrayMap(x ->
+        multiIf(
+          indexOf(s, x) = a[2], arraySlice(x, a[1] + 1, length(x)),
+          indexOf(s, x) = a[3], arrayConcat(x, arraySlice(arrayElement(s, a[2]), 1, a[1])),
+          x),
+        s) as arr
+      FROM stack_columns
+    )
+
+
+
+NODE movements_steps
+SQL >
+
+    WITH (SELECT * FROM stack_columns) AS stacks
+    SELECT steps[1] as step, movements as movement, stacks, [['']] as result
+    FROM
+        (
+            SELECT
+                arrayMap(
+                    x -> [toInt8(x)], range(1, length(movements) + 1)
+                ) as steps,
+                groupArray(movement) as movements
+            FROM
+                (
+                    SELECT
+                        arrayMap(
+                            x -> toInt8(x), extractAll(line, '(\d+)')
+                        ) as movement
+                    FROM day_5
+                    WHERE line LIKE '%move%'
+                )
+        )
+    ARRAY JOIN steps, movements
+
+
+
+NODE test_window_functions
+SQL >
+
+    SELECT
+        movement,
+        last_value(stacks) OVER window_elves,
+        arrayMap(
+            x -> multiIf(
+            indexOf(stacks, x) = movement[2], arraySlice(x, movement[1] + 1, length(x)),
+            indexOf(stacks, x) = movement[3], arrayConcat(x, arraySlice(arrayElement(stacks, movement[2]), 1, movement[1])),
+            x),
+            stacks
+        ) as arr
+    FROM movements_steps
+    WINDOW window_elves AS (ORDER BY stacks ROWS BETWEEN 1 PRECEDING AND CURRENT ROW)
+
+
+
+NODE step_movements
+SQL >
+
+    SELECT steps[1] as step, movements as movement
+    FROM
+        (
+            SELECT
+                arrayMap(
+                    x -> [toInt8(x)], range(1, length(movements) + 1)
+                ) as steps,
+                groupArray(movement) as movements
+            FROM
+                (
+                    SELECT
+                        arrayMap(
+                            x -> toInt8(x), extractAll(line, '(\d+)')
+                        ) as movement
+                    FROM day_5
+                    WHERE line LIKE '%move%'
+                )
+        )
+    ARRAY JOIN steps, movements
+
+
+
+NODE do_not_delete
+SQL >
+
+    SELECT
+        step,
+        arrayMap(x -> toString(x), movement) as movement,
+        arrayConcat([movement], stacks) as stacks,
+        if(step = 1, stacks, arrayConcat([movement], neighbor(stacks, -1))) as result
+    FROM movements_steps
+
+
+
+NODE advent_of_code_day_5_9278_copy_9
+SQL >
+
+    SELECT arr
+    FROM (
+    WITH (SELECT movement FROM movements LIMIT 1) as m 
+    SELECT
+      arrayMap(x -> x, m) as a,
+      arrayMap(x ->
+        multiIf(
+          indexOf(s, x) = a[2], arraySlice(x, a[1] + 1, length(x)),
+          indexOf(s, x) = a[3], arrayConcat(x, arraySlice(arrayElement(s, a[2]), 1, a[1])),
+          x),
+        s) as arr
+      FROM stack_columns
+    )
+
+
+
+NODE test_all
+SQL >
+
+    SELECT
+        step,
+        movement as a,
+        if(
+            step = 1,
+            arrayMap(
+                x -> multiIf(
+                    indexOf(stacks, x) = a[2],
+                    arraySlice(x, a[1] + 1, length(x)),
+                    indexOf(stacks, x) = a[3],
+                    arrayConcat(x, arraySlice(arrayElement(stacks, a[2]), 1, a[1])),
+                    x
+                ),
+                stacks
+            ),
+            arrayMap(
+                x -> multiIf(
+                    indexOf(neighbor(stacks, -1), x) = a[2],
+                    arraySlice(x, a[1] + 1, length(x)),
+                    indexOf(neighbor(stacks, -1), x) = a[3],
+                    arrayConcat(x, arraySlice(arrayElement(neighbor(stacks, -1), a[2]), 1, a[1])),
+                    x
+                ),
+                neighbor(stacks, -1)
+            )
+        ) as stacks,
+        if(step = 1, stacks, neighbor(stacks, -1)) as result
+    FROM movements_steps
+
+
+
+NODE advent_of_code_day_5_9278_copy_12
+SQL >
+
+    SELECT * FROM test_all
+    ORDER BY step DESC
+    LIMIT 1
+
+
